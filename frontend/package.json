@@ -1,0 +1,47 @@
+{
+    "name": "@throw-out-error/next-homelab-frontend",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "eslint src/**/*.ts --quiet --fix"
+    },
+    "dependencies": {
+        "@apollo/react-hooks": "^4.0.0",
+        "apollo-boost": "^0.4.9",
+        "apollo-link-ws": "^1.0.20",
+        "apollo-server-micro": "^2.17.0",
+        "axios": "^0.20.0",
+        "bootstrap": "^4.5.2",
+        "cheerio": "^1.0.0-rc.3",
+        "graphql": "^15.3.0",
+        "graphql-tag": "^2.11.0",
+        "knex": "^0.21.5",
+        "mysql": "^2.18.1",
+        "next": "9.5.3",
+        "next-apollo": "^5.0.0",
+        "next-auth": "^3.1.0",
+        "react": "16.13.1",
+        "react-apollo": "^3.1.5",
+        "react-bootstrap": "^1.3.0",
+        "react-dom": "16.13.1",
+        "react-hook-form": "^6.8.2",
+        "rsync": "^0.6.1",
+        "subscriptions-transport-ws": "^0.9.18"
+    },
+    "devDependencies": {
+        "@types/cheerio": "^0.22.21",
+        "@types/react": "^16.9.49",
+        "@types/react-bootstrap": "^0.32.23",
+        "@types/react-dom": "^16.9.8",
+        "@typescript-eslint/eslint-plugin": "^4.1.0",
+        "@typescript-eslint/parser": "^4.1.0",
+        "eslint": "^7.9.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "prettier": "^2.1.1",
+        "typescript": "^4.0.2"
+    }
+}

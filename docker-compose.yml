@@ -1,0 +1,28 @@
+ersion: "3"
+services:
+    backend:
+        build:
+            context: ./backend
+        depends_on:
+            - db
+        env_file: ./backend/.env
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./backend:/app
+    frontend:
+        build:
+            context: ./frontend
+        command: yarn dev
+        depends_on:
+            - backend
+        volumes:
+            - ./frontend:/app
+        ports:
+            - "3000:3000"
+    db:
+        image: postgres:alpine
+        volumes:
+            - db_data:/var/lib/postgresql/data
+volumes:
+    db_data:
