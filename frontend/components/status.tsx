@@ -6,7 +6,7 @@ import { Container, Button } from "react-bootstrap";
 const HOSTS_PER_PAGE = 10;
 
 const GET_HOSTS = gql`
-    query health() {
+    query health {
         health {
             status
         }
@@ -14,13 +14,11 @@ const GET_HOSTS = gql`
 `;
 
 function Health() {
-    const { loading, error, data, fetchMore } = useQuery(GET_HOSTS, {
+    const { loading, error, data } = useQuery(GET_HOSTS, {
         variables: {},
         notifyOnNetworkStatusChange: true,
     });
-    if (data && data.health) {
-        return <p>{data.health.status}</p>;
-    }
+    if (data && data.health) return <p>Status: {data.health.status}</p>;
     return <div>Loading...</div>;
 }
 
