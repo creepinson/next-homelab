@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { Container, Nav, Navbar, NavItem } from "react-bootstrap";
+import { Nav, Navbar, NavItem } from "react-bootstrap";
 
 const Header = () => {
     return (

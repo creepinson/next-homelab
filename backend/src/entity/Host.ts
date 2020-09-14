@@ -3,24 +3,16 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
 @Entity()
 @ObjectType()
-export class User extends BaseEntity {
-    @Field()
+export class Host extends BaseEntity {
     @PrimaryGeneratedColumn()
+    @Field()
     id: number;
 
-    @Field()
     @Column()
-    name: string;
-
     @Field()
-    @Column({ unique: true })
-    username: string;
+    address: string;
 
-    @Field()
     @Column()
-    password: string;
-
     @Field()
-    @Column()
-    roles: string;
+    group: string;
 }
