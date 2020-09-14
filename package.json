@@ -1,0 +1,19 @@
+{
+    "name": "@throw-out-error/next-homelab",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "start": "ultra -r dev"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "ultra-runner": "^3.5.0"
+    }
+}

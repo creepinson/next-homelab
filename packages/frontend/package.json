@@ -1,7 +1,6 @@
 {
     "name": "@throw-out-error/next-homelab-frontend",
     "version": "0.0.1",
-    "private": true,
     "scripts": {
         "dev": "next dev",
         "build": "next build",

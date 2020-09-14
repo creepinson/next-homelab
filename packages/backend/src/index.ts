@@ -62,7 +62,7 @@ import cors from "cors";
             // and if no user, restrict access
             return false;
 
-        if (user.roles.split(",").some((role) => roles.includes(role)))
+        if (user.roles?.split(",").some((role) => roles.includes(role)))
             // grant access if the roles overlap
             return true;
 

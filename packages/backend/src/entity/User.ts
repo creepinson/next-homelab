@@ -9,10 +9,6 @@ export class User extends BaseEntity {
     id: number;
 
     @Field()
-    @Column()
-    name: string;
-
-    @Field()
     @Column({ unique: true })
     username: string;
 
@@ -20,7 +16,11 @@ export class User extends BaseEntity {
     @Column()
     password: string;
 
-    @Field()
-    @Column()
-    roles: string;
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    roles?: string;
+
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    name?: string;
 }
