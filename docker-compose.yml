@@ -2,22 +2,22 @@ ersion: "3"
 services:
     backend:
         build:
-            context: ./backend
+            context: ./packages/backend
         depends_on:
             - db
-        env_file: ./backend/.env
+        env_file: ./packages/backend/.env
         ports:
             - "8080:8080"
         volumes:
-            - ./backend:/app
+            - ./packages/backend:/app
     frontend:
         build:
-            context: ./frontend
+            context: ./packages/frontend
         command: yarn dev
         depends_on:
             - backend
         volumes:
-            - ./frontend:/app
+            - ./packages/frontend:/app
         ports:
             - "3000:3000"
     db:

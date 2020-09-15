@@ -5,14 +5,15 @@ import { config } from "dotenv";
 import { ApolloServer } from "apollo-server-express";
 import { AuthChecker, buildSchema } from "type-graphql";
 import { HealthResolver } from "./resolvers/HealthResolver";
-// import expressJWT from "express-jwt";
+import cookieParser from "cookie-parser";
 import session from "express-session";
 import jwt from "jsonwebtoken";
 import { User } from "./entity/User";
 import { HostResolver } from "./resolvers/HostResolver";
-import { hashPassword, UserResolver } from "./resolvers/UserResolver";
-import { Context } from "./types";
+import { UserResolver } from "./resolvers/UserResolver";
+import { Context, CustomRequest } from "./types";
 import cors from "cors";
+import { ACCESS_TOKEN_SECRET } from "./config";
 
 (async () => {
     const app = express();
@@ -25,9 +26,9 @@ import cors from "cors";
     app.use(
         session({
             secret: "keyboard cat",
-            resave: false,
+            resave: true,
             saveUninitialized: true,
-            cookie: { secure: true },
+            cookie: { secure: "auto", httpOnly: false },
         }),
     );
 
@@ -49,8 +50,14 @@ import cors from "cors";
         },
     });
 
-    const customAuthChecker: AuthChecker<Context> = ({ context }, roles) => {
-        const { user } = context;
+    const customAuthChecker: AuthChecker<Context> = async (
+        { context },
+        roles,
+    ) => {
+        const { req } = context;
+        if (!req.userId) return false;
+
+        const user = await User.findOne(req.userId);
 
         if (roles.length === 0)
             // if `@Authorized()`, check only is user exist
@@ -70,12 +77,13 @@ import cors from "cors";
         return false;
     };
 
-    app.post("/auth", async (req, res) => {
+    app.post("/auth", async (_req, res) => {
         try {
-            const user = await User.find({
-                ...req.body,
-                password: hashPassword(req.body.password),
-            });
+            const req = _req as CustomRequest;
+            if (!req.userId)
+                return res.status(400).json({ error: "Not authenticated" });
+
+            const user = await User.findOne(req.userId);
 
             if (!user) return res.status(500).json({ error: "Invalid user" });
 
@@ -103,6 +111,17 @@ import cors from "cors";
             res,
             user: (req as any).session.user as User,
         }),
+    });
+
+    app.use(cookieParser());
+
+    app.use((req, _, next) => {
+        const accessToken = req.cookies["access-token"];
+        try {
+            const data = jwt.verify(accessToken, ACCESS_TOKEN_SECRET) as any;
+            (req as any).userId = data.id;
+        } catch {}
+        next();
     });
 
     apolloServer.applyMiddleware({ app, cors: false });

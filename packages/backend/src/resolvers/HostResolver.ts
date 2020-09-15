@@ -4,8 +4,8 @@ import { Host } from "../entity/Host";
 @Resolver()
 export class HostResolver {
     @Authorized("admin")
-    @Query(() => Host)
-    hosts() {
-        return Host.find();
+    @Query(() => [Host])
+    async hosts() {
+        return await Host.find();
     }
 }

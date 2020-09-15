@@ -11,4 +11,4 @@ COPY . .
 # If you have native dependencies, you'll need extra tools
 # RUN apk add --no-cache make gcc g++ python
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]

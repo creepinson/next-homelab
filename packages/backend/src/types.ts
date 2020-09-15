@@ -8,8 +8,36 @@ export class Health {
     status: string;
 }
 
+@ObjectType()
+export class Result {
+    @Field()
+    message: string;
+
+    @Field()
+    status: boolean;
+
+    @Field({ nullable: true })
+    user?: User;
+
+    constructor(status: boolean, message?: string, user?: User) {
+        this.status = status;
+        this.message = message ?? "";
+        this.user = user;
+    }
+}
+
+export interface CustomRequest extends Request {
+    userId?: string;
+}
+
 export type Context = {
-    req: Request;
+    req: CustomRequest;
     res: Response;
     user: User;
 };
+
+declare module "express" {
+    export interface Request {
+        session: any;
+    }
+}
