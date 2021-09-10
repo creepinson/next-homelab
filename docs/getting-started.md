@@ -12,7 +12,7 @@
 ### Creating the Environment Variables
 
 Once you have cloned the git repository for the panel,
-you can then create a `.env` file in the packages/backend folder. 
+you can then create a `.env` file in the packages/backend folder.
 The .env file needs to contain the credentials required to access your postgresql database.
 Here's an example.
 
