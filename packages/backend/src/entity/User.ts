@@ -6,19 +6,19 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 export class User extends BaseEntity {
     @Field()
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Field()
     @Column({ unique: true })
-    username: string;
+    username!: string;
 
     @Field()
     @Column()
-    password: string;
+    password!: string;
 
-    @Field({ nullable: true })
-    @Column({ nullable: true })
-    roles?: string;
+    @Field(() => [String], { nullable: true })
+    @Column({ nullable: true, type: "json" })
+    roles?: string[];
 
     @Field({ nullable: true })
     @Column({ nullable: true })

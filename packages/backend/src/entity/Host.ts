@@ -6,13 +6,13 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 export class Host extends BaseEntity {
     @PrimaryGeneratedColumn()
     @Field()
-    id: number;
+    id!: number;
 
     @Column()
     @Field()
-    address: string;
+    address!: string;
 
     @Column()
     @Field()
-    group: string;
+    group!: string;
 }

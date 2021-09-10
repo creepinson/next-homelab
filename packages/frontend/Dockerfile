@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:latest
+FROM creepinson/alpine-pnpm:latest
 
 # If possible, run your container using `docker run --init`
 # Otherwise, you can use `tini`:
@@ -11,6 +11,7 @@ COPY . .
 # If you have native dependencies, you'll need extra tools
 # RUN apk add --no-cache make gcc g++ python
 
-RUN npm run build
+RUN pnpm i
+RUN pnpm run build
 
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "run", "start"]

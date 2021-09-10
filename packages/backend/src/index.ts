@@ -13,7 +13,7 @@ import { HostResolver } from "./resolvers/HostResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 import { Context, CustomRequest } from "./types";
 import cors from "cors";
-import { ACCESS_TOKEN_SECRET } from "./config";
+import { accessTokenSecret, cookieName } from "./config";
 
 (async () => {
     const app = express();
@@ -21,14 +21,25 @@ import { ACCESS_TOKEN_SECRET } from "./config";
     config();
 
     app.use(express.json());
-    app.use(cors());
+    app.use(
+        cors({
+            credentials: true,
+            origin: process.env.FRONTEND_URI ?? "http://localhost:3000",
+        }),
+    );
 
     app.use(
         session({
-            secret: "keyboard cat",
-            resave: true,
-            saveUninitialized: true,
-            cookie: { secure: "auto", httpOnly: false },
+            name: cookieName,
+            secret: process.env.SESSION_SECRET ?? "keyboard cat",
+            resave: false,
+            saveUninitialized: false,
+            cookie: {
+                maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+                secure: false,
+                httpOnly: true,
+                sameSite: "lax",
+            },
         }),
     );
 
@@ -39,7 +50,7 @@ import { ACCESS_TOKEN_SECRET } from "./config";
         password: process.env.DB_PASS,
         host: process.env.DB_HOST ?? "localhost",
         synchronize: true,
-        logging: true,
+        logging: process.env.DB_DEBUG === "true",
         entities: ["src/entity/**/*.ts"],
         migrations: ["src/migration/**/*.ts"],
         subscribers: ["src/subscriber/**/*.ts"],
@@ -69,37 +80,13 @@ import { ACCESS_TOKEN_SECRET } from "./config";
             // and if no user, restrict access
             return false;
 
-        if (user.roles?.split(",").some((role) => roles.includes(role)))
+        if (user.roles?.some((role) => roles.includes(role)))
             // grant access if the roles overlap
             return true;
 
         // no roles matched, restrict access
         return false;
     };
-
-    app.post("/auth", async (_req, res) => {
-        try {
-            const req = _req as CustomRequest;
-            if (!req.userId)
-                return res.status(400).json({ error: "Not authenticated" });
-
-            const user = await User.findOne(req.userId);
-
-            if (!user) return res.status(500).json({ error: "Invalid user" });
-
-            const token = jwt.sign(
-                req.session?.user,
-                process.env.SECRET || "secret1234",
-            );
-            req.session!.token = token;
-            req.session!.user = user;
-            return req.session!.save(() => {
-                res.json({ token, user });
-            });
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
-    });
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
@@ -109,24 +96,24 @@ import { ACCESS_TOKEN_SECRET } from "./config";
         context: ({ req, res }: Context) => ({
             req,
             res,
-            user: (req as any).session.user as User,
         }),
     });
+    await apolloServer.start();
 
     app.use(cookieParser());
 
-    app.use((req, _, next) => {
+    app.use((req: CustomRequest, res, next) => {
         const accessToken = req.cookies["access-token"];
         try {
-            const data = jwt.verify(accessToken, ACCESS_TOKEN_SECRET) as any;
-            (req as any).userId = data.id;
+            const data = jwt.verify(accessToken, accessTokenSecret) as any;
+            req.session.userId = data.userId;
         } catch {}
         next();
     });
 
     apolloServer.applyMiddleware({ app, cors: false });
 
-    app.listen(process.env.PORT || 8000, () => {
+    app.listen(process.env.PORT || 8080, () => {
         console.log("express server started");
     });
 })();

@@ -1,9 +1,9 @@
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { gql } from "apollo-boost";
 import React from "react";
 import { Container, Button } from "react-bootstrap";
 
-const HOSTS_PER_PAGE = 10;
+const hostsPerPage = 10;
 
 const GET_HOSTS = gql`
     query health {

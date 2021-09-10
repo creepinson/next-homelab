@@ -2,16 +2,18 @@
     "name": "@throw-out-error/next-homelab",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "licenses": [
+        {
+            "type": "GPL-3.0"
+        }
+    ],
     "private": true,
-    "scripts": {
-        "start": "ultra -r dev"
-    },
-    "keywords": [],
-    "author": "",
+    "author": "Theo Paris",
     "license": "MIT",
     "devDependencies": {
-        "lerna": "^3.22.1",
-        "ultra-runner": "^3.5.0"
+        "eslint": "^7.32.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "prettier": "^2.4.0"
     }
 }
