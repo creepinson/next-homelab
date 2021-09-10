@@ -1,9 +1,7 @@
-# Next Homelab
+# Flowtr Panel
 
-A server web administration panel made with React, GraphQL, Express and Postgresql.
+A server control panel made with React, GraphQL, Express and Postgresql.
 
-## To Do
+## Documentation
 
-- nginx & apache plugins
-- data fetchers (host servers)
-- backup systems (rsync)
+[You can view the documentation here](https://creepinson.github.io/next-homelab).
